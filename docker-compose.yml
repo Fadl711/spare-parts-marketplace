@@ -1,0 +1,66 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: spare-parts-marketplace-app
+        container_name: spare-parts-marketplace-app
+        restart: unless-stopped
+        working_dir: /var/www
+        volumes:
+            - .:/var/www
+        networks:
+            - spare-parts-marketplace-network
+
+    web:
+        image: nginx:alpine
+        container_name: spare-parts-marketplace-web
+        restart: unless-stopped
+        ports:
+            - "8000:80"
+        volumes:
+            - .:/var/www
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d
+        networks:
+            - spare-parts-marketplace-network
+        depends_on:
+            - app
+
+    db:
+        image: mysql:8.0
+        container_name: spare-parts-marketplace-db
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        volumes:
+            - dbdata:/var/lib/mysql
+        networks:
+            - spare-parts-marketplace-network
+
+    pma:
+        image: phpmyadmin/phpmyadmin
+        container_name: spare-parts-marketplace-pma
+        restart: unless-stopped
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+            PMA_ARBITRARY: 1
+        ports:
+            - "8080:80"
+        networks:
+            - spare-parts-marketplace-network
+        depends_on:
+            - db
+
+networks:
+    spare-parts-marketplace-network:
+        driver: bridge
+
+volumes:
+    dbdata:
+        driver: local

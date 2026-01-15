@@ -23,14 +23,14 @@ Route::prefix('v1')->group(function () {
     });
 
     // مسارات مصادقة البائعين (Seller Auth)
-    Route::controller(SellerAuthController::class)->group(function () {
+/*     Route::controller(SellerAuthController::class)->group(function () {
         Route::post('seller/register', 'register');
         Route::post('seller/login', 'login');
 
         Route::middleware('auth:sanctum')->group(function () {
             Route::post('seller/logout', 'logout');
         });
-    });
+    }); */
 
     // هنا سنضع مسارات البحث عن قطع الغيار والمراجعات لاحقاً
 });

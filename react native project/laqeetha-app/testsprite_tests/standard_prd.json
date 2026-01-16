@@ -1,0 +1,109 @@
+{
+  "meta": {
+    "project": "Laqeetha Auto Spare Parts Marketplace",
+    "date": "2026-01-15",
+    "prepared_by": "Software Development Manager"
+  },
+  "product_overview": "Laqeetha Auto Spare Parts Marketplace is a mobile and web platform facilitating secure authentication and seamless interaction between customers and sellers, enabling users to search, discover, and purchase vehicle spare parts efficiently with detailed information and robust backend API support.",
+  "core_goals": [
+    "Provide secure and streamlined customer authentication including registration, login, and logout.",
+    "Enable seller registration and authentication to onboard parts suppliers effectively.",
+    "Offer comprehensive public APIs for core automotive data such as vehicles, categories, and parts types.",
+    "Facilitate searchable marketplace functionality allowing users to find and view detailed auto parts information.",
+    "Deliver a seamless user experience through mobile-friendly interfaces built with React Native.",
+    "Ensure a scalable backend architecture with Laravel 11 and API security via Sanctum."
+  ],
+  "key_features": [
+    "Customer authentication system supporting registration, login, and logout secured through Sanctum tokens.",
+    "Seller authentication including store registration and secure login mechanisms.",
+    "Public APIs providing detailed lists of vehicles, categories, and subcategories relevant to auto parts.",
+    "Marketplace endpoints allowing search queries by vehicle make and model to retrieve applicable parts.",
+    "Mobile app screens for Home, Search Results, Part Details, and Favorites to facilitate user engagement.",
+    "Navigation structure supporting smooth transitions between authentication, marketplace, and profile screens.",
+    "API documentation compliant with OpenAPI 3.0 standards for clear integration and maintenance."
+  ],
+  "user_flow_summary": [
+    "Customers register by providing name, phone number, password, and device name; then log in to access marketplace features.",
+    "Sellers register with store details, owner information, location, and credentials for store management access.",
+    "Users query vehicles, categories, and parts through public endpoints to browse available auto spare parts.",
+    "Authenticated customers and sellers log out securely, invalidating their tokens.",
+    "Users perform parts search by specifying vehicle make and model parameters to find matching parts.",
+    "Users browse featured parts, categories, brands from the Home Screen and navigate to detailed part information.",
+    "Users manage their favorite parts via the Favorites screen for quicker access to preferred items."
+  ],
+  "validation_criteria": [
+    "Successful creation of customer and seller accounts verified by appropriate 201 API responses.",
+    "Authentication endpoints correctly validate credentials and return 200 for successful logins, 401 for failures.",
+    "Public data endpoints return accurate and complete lists of vehicles, categories, and parts with 200 responses.",
+    "Marketplace search returns relevant parts data filtered by vehicle make and model.",
+    "Security mechanisms via Sanctum ensure that protected routes like logout enforce valid authentication tokens.",
+    "Complete backend setup as per README instructions producing a running Laravel server with seeded database.",
+    "Mobile app navigation allows smooth switching between screens without errors.",
+    "API service handles requests correctly with Axios integration in the client application."
+  ],
+  "code_summary": {
+    "tech_stack": [
+      "TypeScript",
+      "React Native",
+      "Expo",
+      "NativeWind",
+      "React Navigation",
+      "Axios"
+    ],
+    "features": [
+      {
+        "name": "Authentication",
+        "description": "User authentication functionality including Login and Registration for Customers and Sellers.",
+        "files": [
+          "src/screens/LoginScreen.tsx",
+          "src/contexts/AuthContext.tsx",
+          "src/services/api.ts"
+        ]
+      },
+      {
+        "name": "Home Screen",
+        "description": "Main landing screen for customers displaying featured parts, categories, brands, and search entry.",
+        "files": [
+          "src/screens/customer/HomeScreen.tsx"
+        ]
+      },
+      {
+        "name": "Part Details",
+        "description": "Detailed view of a specific car part including images, price, seller info, and status.",
+        "files": [
+          "src/screens/customer/PartDetailsScreen.tsx"
+        ]
+      },
+      {
+        "name": "Search & Discovery",
+        "description": "Functionality to search for parts with filters and view results.",
+        "files": [
+          "src/screens/customer/SearchResultsScreen.tsx",
+          "src/services/api.ts"
+        ]
+      },
+      {
+        "name": "Favorites",
+        "description": "Screen to view and manage favorited parts.",
+        "files": [
+          "src/screens/customer/FavoritesScreen.tsx"
+        ]
+      },
+      {
+        "name": "Navigation",
+        "description": "Application navigation structure enabling movement between screens.",
+        "files": [
+          "src/navigation/AppNavigator.tsx",
+          "src/navigation/CustomerNavigator.tsx"
+        ]
+      },
+      {
+        "name": "API Service",
+        "description": "Centralized service for handling all API requests to the backend.",
+        "files": [
+          "src/services/api.ts"
+        ]
+      }
+    ]
+  }
+}

@@ -38,31 +38,34 @@ class SellerAuthController extends Controller
 
         return response()->json([
             'message' => 'Store registered successfully',
-            'data' => [
-                'user' => [
-                    'id' => $seller->id,
-                    'store_name' => $seller->store_name,
-                    'owner_name' => $seller->owner_name,
-                    'location' => [
-                        'city' => $seller->city,
-                        'district' => $seller->district,
-                    ],
-                    'type' => 'seller',
-                ],
-                'token' => $token,
+            'user' => [
+                'id' => $seller->id,
+                'name' => $seller->owner_name,
+                'store_name' => $seller->store_name,
+                'email' => $seller->email,
+                'phone' => $seller->phone,
+                'type' => 'seller',
             ],
+            'token' => $token,
         ], 201);
     }
 
     public function login(Request $request)
     {
         $request->validate([
-            'phone' => 'required',
+            'email' => 'required_without:phone|string',
+            'phone' => 'required_without:email|string',
             'password' => 'required',
-            'device_name' => 'required',
+            'device_name' => 'nullable|string',
         ]);
 
-        $seller = Seller::where('phone', $request->phone)->first();
+        // Find seller by email or phone
+        $seller = null;
+        if ($request->email) {
+            $seller = Seller::where('email', $request->email)->first();
+        } elseif ($request->phone) {
+            $seller = Seller::where('phone', $request->phone)->first();
+        }
 
         if (! $seller || ! Hash::check($request->password, $seller->password)) {
             return response()->json([
@@ -70,19 +73,20 @@ class SellerAuthController extends Controller
             ], 401);
         }
 
-        $token = $seller->createToken($request->device_name, ['seller'])->plainTextToken;
+        $deviceName = $request->device_name ?? 'mobile-app';
+        $token = $seller->createToken($deviceName, ['seller'])->plainTextToken;
 
         return response()->json([
             'message' => 'Login successful',
-            'data' => [
-                'user' => [
-                    'id' => $seller->id,
-                    'store_name' => $seller->store_name,
-                    'owner_name' => $seller->owner_name,
-                    'type' => 'seller',
-                ],
-                'token' => $token,
+            'user' => [
+                'id' => $seller->id,
+                'name' => $seller->owner_name,
+                'store_name' => $seller->store_name,
+                'email' => $seller->email,
+                'phone' => $seller->phone,
+                'type' => 'seller',
             ],
+            'token' => $token,
         ]);
     }
     

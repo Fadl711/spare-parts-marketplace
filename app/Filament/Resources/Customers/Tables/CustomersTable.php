@@ -7,6 +7,8 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
 class CustomersTable
@@ -15,34 +17,39 @@ class CustomersTable
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->label('#')
+                    ->sortable(),
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->label('الاسم')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('phone')
+                    ->label('الجوال')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('البريد')
                     ->searchable(),
                 TextColumn::make('city')
+                    ->label('المدينة')
                     ->searchable(),
-                TextColumn::make('latitude')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('longitude')
-                    ->numeric()
-                    ->sortable(),
                 IconColumn::make('is_banned')
+                    ->label('محظور')
                     ->boolean(),
                 TextColumn::make('created_at')
+                    ->label('تاريخ التسجيل')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->filters([
-                //
+                TernaryFilter::make('is_banned')
+                    ->label('الحالة')
+                    ->placeholder('الكل')
+                    ->trueLabel('محظور')
+                    ->falseLabel('نشط'),
+                SelectFilter::make('city')
+                    ->label('المدينة')
+                    ->options(fn () => \App\Models\Customer::distinct()->pluck('city', 'city')->toArray()),
             ])
             ->recordActions([
                 EditAction::make(),

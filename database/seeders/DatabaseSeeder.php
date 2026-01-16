@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Part;
@@ -17,6 +18,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+                Admin::create([
+            'username' => 'admin',
+            'password' => Hash::make('password'),
+            'role' => 'super_admin',
+            'is_active' => true,
+        ]);
         // 1. Create Seller
         $seller = Seller::create([
             'store_name' => 'Al-Amal Parts',

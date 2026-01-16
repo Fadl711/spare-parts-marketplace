@@ -1,0 +1,8 @@
+src/screens/customer/CategorySelectionScreen.tsx(15,10): error TS2300: Duplicate identifier 'ApiService'.
+src/screens/customer/CategorySelectionScreen.tsx(16,10): error TS2300: Duplicate identifier 'ApiService'.
+src/screens/customer/ChatScreen.tsx(20,31): error TS2307: Cannot find module '../../data/mock' or its corresponding type declarations.
+src/screens/customer/ChatScreen.tsx(132,30): error TS2552: Cannot find name 'seller'. Did you mean 'sellerId'?
+src/screens/customer/PartDetailsScreen.tsx(262,47): error TS2339: Property 'name_ar' does not exist on type '{}'.
+src/screens/customer/PartDetailsScreen.tsx(265,47): error TS2339: Property 'name_ar' does not exist on type '{}'.
+src/screens/LoginScreen.tsx(120,21): error TS2554: Expected 1 arguments, but got 2.
+src/screens/LoginScreen.tsx(135,21): error TS2554: Expected 1 arguments, but got 2.

@@ -1,0 +1,378 @@
+[
+  {
+    "id": "TC001",
+    "title": "Customer Registration with Valid Data",
+    "description": "Verify that a customer can register successfully by providing valid name, phone number, password, and device name.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send registration API request with valid name, phone number, password, and device name."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response status code is 201 Created."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response body contains customer ID and authentication token."
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Customer Registration with Missing Fields",
+    "description": "Verify that registration fails when required fields are missing in the customer registration request.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send registration API request omitting required fields such as name or phone number."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response status code is 400 Bad Request or appropriate validation error."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response body includes error details about missing fields."
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Customer Login with Correct Credentials",
+    "description": "Verify successful customer login with valid phone number and password, receiving a Sanctum token.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send login API request with correct phone number and password."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response status code is 200 OK."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response body contains a valid Sanctum token."
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Customer Login with Incorrect Credentials",
+    "description": "Verify login fails with invalid phone number or password.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send login API request with incorrect phone number or password."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response status code is 401 Unauthorized."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response body contains an authentication failure message."
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Seller Registration with Complete Store Details",
+    "description": "Verify seller can register successfully providing store details, owner info, location, and credentials.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send seller registration API request with valid store name, owner info, location, and credentials."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response status code is 201 Created."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response includes seller/store identifier and authentication token."
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Seller Login with Valid Credentials",
+    "description": "Verify seller login is successful using store credentials and returns authentication token.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send seller login API request with correct store credentials."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify response status is 200 OK."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify response includes a Sanctum token."
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Public API Vehicle List Retrieval",
+    "description": "Verify public API endpoint returns an accurate list of vehicles with 200 status and expected structure.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send a GET request to the public vehicles endpoint."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response status is 200 OK."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response contains a complete list of vehicles with relevant fields."
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Public API Categories and Subcategories Retrieval",
+    "description": "Verify categories and subcategories API returns full and accurate lists with 200 status.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send GET requests to categories and subcategories public API endpoints."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify response code is 200 OK for each endpoint."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify response data includes expected categories and subcategories details."
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Marketplace Search by Vehicle Make and Model",
+    "description": "Verify that searching parts filtered by vehicle make and model returns relevant parts data.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send a marketplace search API request with valid vehicle make and model parameters."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response status is 200 OK."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the returned parts list is relevant to the vehicle make and model."
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Marketplace Search with Invalid Vehicle Parameters",
+    "description": "Verify search API returns appropriate empty results or error when vehicle make or model is invalid or missing.",
+    "category": "error handling",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send marketplace search API request with invalid or no vehicle parameters."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response status is 200 OK with empty results, or an error with suitable status code."
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Authenticated Customer Logout and Token Invalidation",
+    "description": "Verify that an authenticated customer can log out and the Sanctum token is invalidated.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as a customer to obtain authentication token."
+      },
+      {
+        "type": "action",
+        "description": "Send logout API request with valid authorization token."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify response status is 200 OK confirming logout."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to access a protected endpoint with the same token."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access is denied (401 Unauthorized) after logout."
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Authenticated Seller Logout and Token Invalidation",
+    "description": "Verify that an authenticated seller can log out and their Sanctum token is invalidated properly.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in as seller to obtain Sanctum token."
+      },
+      {
+        "type": "action",
+        "description": "Send logout API request using seller's authentication token."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify response status code is 200 OK."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to access protected seller endpoints with invalidated token."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure response status is 401 Unauthorized."
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Mobile App Navigation Flow Testing",
+    "description": "Verify user can navigate seamlessly between Authentication, Home, Search Results, Part Details, and Favorites screens without errors.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Launch the app and navigate to login screen."
+      },
+      {
+        "type": "action",
+        "description": "Perform successful login to proceed to Home Screen."
+      },
+      {
+        "type": "action",
+        "description": "From Home Screen, navigate to Search Results screen using search functionality."
+      },
+      {
+        "type": "action",
+        "description": "Select a part from search results to open Part Details screen."
+      },
+      {
+        "type": "action",
+        "description": "From Part Details, add part to favorites and navigate to Favorites screen."
+      },
+      {
+        "type": "action",
+        "description": "Navigate back to Home and then to Profile/Logout screen."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no navigation errors occur and UI renders as expected during all transitions."
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Favorites Management Functionality",
+    "description": "Verify users can add parts to favorites, view the list on Favorites screen, and remove parts successfully.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a customer and navigate to Part Details screen of a specific part."
+      },
+      {
+        "type": "action",
+        "description": "Add the part to favorites."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify part is displayed in the Favorites screen."
+      },
+      {
+        "type": "action",
+        "description": "Remove the part from favorites."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the part no longer appears in the Favorites list."
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "API Service Request Handling with Axios",
+    "description": "Verify that the API service layer handles requests correctly, including request headers, response parsing, and error handling.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Invoke various API calls through the client API service, covering authentication, search, and data retrieval."
+      },
+      {
+        "type": "assertion",
+        "description": "Validate that requests include required headers such as authorization."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm responses are parsed correctly and errors are handled gracefully with appropriate results or exceptions."
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Backend Setup and Database Seeding Verification",
+    "description": "Verify backend Laravel 11 server starts correctly as per README instructions and database is seeded with initial data.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Follow backend setup instructions to start Laravel server."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify server is running without errors."
+      },
+      {
+        "type": "action",
+        "description": "Check database tables for seeded data such as vehicles, categories, and parts."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm expected seed data presence for application functionality."
+      }
+    ]
+  }
+]

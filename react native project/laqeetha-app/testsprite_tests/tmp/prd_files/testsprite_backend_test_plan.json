@@ -1,0 +1,37 @@
+[
+  {
+    "id": "TC001",
+    "title": "customer registration success",
+    "description": "Test the customer registration endpoint with valid data to ensure a new customer account is created successfully and a 201 response is returned."
+  },
+  {
+    "id": "TC002",
+    "title": "customer login success and failure",
+    "description": "Test the customer login endpoint with valid credentials to verify successful login and token issuance, and with invalid credentials to verify a 401 unauthorized response."
+  },
+  {
+    "id": "TC003",
+    "title": "customer logout with valid token",
+    "description": "Test the customer logout endpoint with a valid authentication token to ensure the token is invalidated and a 200 response is returned confirming successful logout."
+  },
+  {
+    "id": "TC004",
+    "title": "seller registration success",
+    "description": "Test the seller registration endpoint with valid store and owner details to ensure a new seller account is created successfully and a 201 response is returned."
+  },
+  {
+    "id": "TC005",
+    "title": "vehicles list retrieval",
+    "description": "Test the public vehicles endpoint to verify it returns a complete and accurate list of vehicles with a 200 response."
+  },
+  {
+    "id": "TC006",
+    "title": "categories list retrieval",
+    "description": "Test the public categories endpoint to verify it returns a complete and accurate list of categories with a 200 response."
+  },
+  {
+    "id": "TC007",
+    "title": "parts search by make and model",
+    "description": "Test the parts search endpoint with valid vehicle make and model query parameters to ensure it returns a relevant list of parts filtered accordingly with a 200 response."
+  }
+]

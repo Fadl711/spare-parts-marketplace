@@ -12,18 +12,32 @@ class VehicleForm
     {
         return $schema
             ->components([
-                TextInput::make('brand')
-                    ->required(),
+                TextInput::make('make')
+                    ->label('الماركة')
+                    ->required()
+                    ->maxLength(100),
                 TextInput::make('model')
-                    ->required(),
+                    ->label('الموديل')
+                    ->required()
+                    ->maxLength(100),
                 TextInput::make('year_from')
+                    ->label('من سنة')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->minValue(1900)
+                    ->maxValue(2030),
                 TextInput::make('year_to')
+                    ->label('إلى سنة')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->minValue(1900)
+                    ->maxValue(2030),
                 Select::make('type')
-                    ->options(['car' => 'Car', 'truck' => 'Truck'])
+                    ->label('النوع')
+                    ->options([
+                        'car' => 'سيارة',
+                        'truck' => 'شاحنة',
+                    ])
                     ->required(),
             ]);
     }

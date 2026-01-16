@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Subcategories\Schemas;
 
+use App\Models\Category;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -11,11 +13,18 @@ class SubcategoryForm
     {
         return $schema
             ->components([
-                TextInput::make('category_id')
+                Select::make('category_id')
+                    ->label('الفئة الرئيسية')
+                    ->options(Category::pluck('name_ar', 'id'))
                     ->required()
-                    ->numeric(),
-                TextInput::make('name')
-                    ->required(),
+                    ->searchable(),
+                TextInput::make('name_ar')
+                    ->label('الاسم بالعربي')
+                    ->required()
+                    ->maxLength(100),
+                TextInput::make('name_en')
+                    ->label('الاسم بالانجليزي')
+                    ->maxLength(100),
             ]);
     }
 }

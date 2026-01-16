@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class VehiclesTable
@@ -14,21 +15,37 @@ class VehiclesTable
     {
         return $table
             ->columns([
-                TextColumn::make('brand')
-                    ->searchable(),
+                TextColumn::make('id')
+                    ->label('#')
+                    ->sortable(),
+                TextColumn::make('make')
+                    ->label('الماركة')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('model')
-                    ->searchable(),
+                    ->label('الموديل')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('year_from')
+                    ->label('من سنة')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('year_to')
+                    ->label('إلى سنة')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('type')
-                    ->badge(),
+                    ->label('النوع')
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => $state === 'car' ? 'سيارة' : 'شاحنة'),
             ])
             ->filters([
-                //
+                SelectFilter::make('type')
+                    ->label('النوع')
+                    ->options([
+                        'car' => 'سيارة',
+                        'truck' => 'شاحنة',
+                    ]),
             ])
             ->recordActions([
                 EditAction::make(),

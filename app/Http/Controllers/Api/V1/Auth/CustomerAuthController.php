@@ -16,6 +16,7 @@ class CustomerAuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|unique:customers',
+            'email' => 'required|string|email|max:255|unique:customers',
             'password' => 'required|string|min:8|confirmed',
             'device_name' => 'required|string',
         ]);
@@ -23,6 +24,7 @@ class CustomerAuthController extends Controller
         $customer = Customer::create([
             'name' => $request->name,
             'phone' => $request->phone,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
             'city' => 'Unspecified', // Defaulting as per API contract since DB requires it but Request doesn't
         ]);
@@ -31,27 +33,33 @@ class CustomerAuthController extends Controller
 
         return response()->json([
             'message' => 'Account created successfully',
-            'data' => [
-                'user' => [
-                    'id' => $customer->id,
-                    'name' => $customer->name,
-                    'phone' => $customer->phone,
-                    'type' => 'customer',
-                ],
-                'token' => $token,
+            'user' => [
+                'id' => $customer->id,
+                'name' => $customer->name,
+                'email' => $customer->email,
+                'phone' => $customer->phone,
+                'type' => 'customer',
             ],
+            'token' => $token,
         ], 201);
     }
 
     public function login(Request $request)
     {
         $request->validate([
-            'phone' => 'required',
+            'email' => 'required_without:phone|string',
+            'phone' => 'required_without:email|string',
             'password' => 'required',
-            'device_name' => 'required',
+            'device_name' => 'nullable|string',
         ]);
 
-        $customer = Customer::where('phone', $request->phone)->first();
+        // Find customer by email or phone
+        $customer = null;
+        if ($request->email) {
+            $customer = Customer::where('email', $request->email)->first();
+        } elseif ($request->phone) {
+            $customer = Customer::where('phone', $request->phone)->first();
+        }
 
         if (! $customer || ! Hash::check($request->password, $customer->password)) {
             return response()->json([
@@ -59,18 +67,19 @@ class CustomerAuthController extends Controller
             ], 401);
         }
 
-        $token = $customer->createToken($request->device_name, ['customer'])->plainTextToken;
+        $deviceName = $request->device_name ?? 'mobile-app';
+        $token = $customer->createToken($deviceName, ['customer'])->plainTextToken;
 
         return response()->json([
             'message' => 'Login successful',
-            'data' => [
-                'user' => [
-                    'id' => $customer->id,
-                    'name' => $customer->name,
-                    'type' => 'customer',
-                ],
-                'token' => $token,
+            'user' => [
+                'id' => $customer->id,
+                'name' => $customer->name,
+                'email' => $customer->email,
+                'phone' => $customer->phone,
+                'type' => 'customer',
             ],
+            'token' => $token,
         ]);
     }
 

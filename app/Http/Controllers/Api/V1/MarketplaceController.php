@@ -48,14 +48,14 @@ class MarketplaceController extends Controller
                 'id' => $part->id,
                 'title' => $part->standardPart ? ($part->standardPart->name_ar ?? $part->standardPart->name_en) : $part->extra_name, // Fallback
                 'price' => $part->price,
-                'currency' => 'YER', // Hardcoded as per example, or could be in DB
+                'currency' => 'YER',
                 'condition' => $part->status,
                 'quality' => $part->quality,
-                'image_urls' => $part->images->pluck('image_path'),
+                'image_urls' => $part->images->map(fn($img) => url('images-proxy/parts/' . basename($img->image_path)))->toArray(),
                 'seller' => [
                     'id' => $part->seller->id,
                     'store_name' => $part->seller->store_name,
-                    'rating' => 0.0, // Placeholder, implementation of reviews needed for real rating
+                    'rating' => 0.0,
                     'location' => [
                         'city' => $part->seller->city,
                         'district' => $part->seller->district,
@@ -63,6 +63,7 @@ class MarketplaceController extends Controller
                     'phones' => [$part->seller->phone],
                     'whatsapp' => $part->seller->whatsapp_link,
                 ],
+                'created_at' => $part->created_at->diffForHumans(),
             ];
         });
 
@@ -83,7 +84,12 @@ class MarketplaceController extends Controller
             'data' => [
                 'id' => $part->id,
                 'title' => $part->standardPart ? ($part->standardPart->name_ar ?? $part->standardPart->name_en) : $part->extra_name,
+                'image_urls' => $part->images->map(fn($img) => url('images-proxy/parts/' . basename($img->image_path)))->toArray(),
                 'price' => $part->price,
+                'currency' => 'YER',
+                'condition' => $part->status,
+                'quality' => $part->quality,
+                'description' => $part->description,
                 'seller' => [
                     'id' => $part->seller->id,
                     'store_name' => $part->seller->store_name,
@@ -94,7 +100,10 @@ class MarketplaceController extends Controller
                     ],
                     'phones' => [$part->seller->phone],
                     'whatsapp' => $part->seller->whatsapp_link,
+                    'logo' => $part->seller->store_logo_path ? url('images-proxy/sellers/' . basename($part->seller->store_logo_path)) : null,
                 ],
+                'vehicles' => $part->vehicles->map(fn($v) => "{$v->make} {$v->model} ({$v->year_from}-{$v->year_to})")->unique()->values(),
+                'created_at' => $part->created_at->format('Y-m-d'),
             ]
         ]);
     }

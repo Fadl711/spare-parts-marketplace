@@ -1,0 +1,57 @@
+{
+    "tech_stack": [
+        "TypeScript",
+        "React Native",
+        "Expo",
+        "NativeWind",
+        "React Navigation",
+        "Axios"
+    ],
+    "features": [
+        {
+            "name": "Authentication",
+            "description": "User authentication functionality including Login and Registration for Customers and Sellers.",
+            "files": [
+                "src/screens/LoginScreen.tsx",
+                "src/contexts/AuthContext.tsx",
+                "src/services/api.ts"
+            ]
+        },
+        {
+            "name": "Home Screen",
+            "description": "Main landing screen for customers displaying featured parts, categories, brands, and search entry.",
+            "files": ["src/screens/customer/HomeScreen.tsx"]
+        },
+        {
+            "name": "Part Details",
+            "description": "Detailed view of a specific car part including images, price, seller info, and status.",
+            "files": ["src/screens/customer/PartDetailsScreen.tsx"]
+        },
+        {
+            "name": "Search & Discovery",
+            "description": "Functionality to search for parts with filters and view results.",
+            "files": [
+                "src/screens/customer/SearchResultsScreen.tsx",
+                "src/services/api.ts"
+            ]
+        },
+        {
+            "name": "Favorites",
+            "description": "Screen to view and manage favorited parts.",
+            "files": ["src/screens/customer/FavoritesScreen.tsx"]
+        },
+        {
+            "name": "Navigation",
+            "description": "Application navigation structure enabling movement between screens.",
+            "files": [
+                "src/navigation/AppNavigator.tsx",
+                "src/navigation/CustomerNavigator.tsx"
+            ]
+        },
+        {
+            "name": "API Service",
+            "description": "Centralized service for handling all API requests to the backend.",
+            "files": ["src/services/api.ts"]
+        }
+    ]
+}

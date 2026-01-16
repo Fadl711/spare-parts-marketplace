@@ -1,0 +1,70 @@
+src/data/mock.ts(6,5): error TS2305: Module '"../types"' has no exported member 'SellerStats'.
+src/data/mock.ts(12,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(22,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(32,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(42,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(52,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(62,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(76,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(82,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(88,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(94,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(100,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(106,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(112,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(134,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(144,13): error TS2353: Object literal may only specify known properties, and 'coordinates' does not exist in type '{ city: string; district: string; address?: string | undefined; }'.
+src/data/mock.ts(150,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(160,13): error TS2353: Object literal may only specify known properties, and 'coordinates' does not exist in type '{ city: string; district: string; address?: string | undefined; }'.
+src/data/mock.ts(166,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(176,13): error TS2353: Object literal may only specify known properties, and 'coordinates' does not exist in type '{ city: string; district: string; address?: string | undefined; }'.
+src/data/mock.ts(186,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(206,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(227,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(246,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(265,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(286,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(304,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(322,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(342,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(361,9): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/mock.ts(448,35): error TS2367: This comparison appears to be unintentional because the types 'number' and 'string' have no overlap.
+src/data/mock.ts(452,37): error TS2367: This comparison appears to be unintentional because the types 'number' and 'string' have no overlap.
+src/data/mock.ts(456,40): error TS2367: This comparison appears to be unintentional because the types 'number' and 'string' have no overlap.
+src/data/mock.ts(460,38): error TS2367: This comparison appears to be unintentional because the types 'number' and 'string' have no overlap.
+src/data/mock.ts(464,39): error TS2551: Property 'sellerId' does not exist on type 'Part'. Did you mean 'seller'?
+src/data/mock.ts(479,43): error TS2367: This comparison appears to be unintentional because the types 'number' and 'string' have no overlap.
+src/data/mock.ts(500,18): error TS2339: Property 'compatibleVehicleIds' does not exist on type 'Part'.
+src/data/mock.ts(500,45): error TS7006: Parameter 'vid' implicitly has an 'any' type.
+src/data/mock.ts(510,18): error TS2339: Property 'compatibleVehicleIds' does not exist on type 'Part'.
+src/data/mock.ts(510,45): error TS7006: Parameter 'vid' implicitly has an 'any' type.
+src/data/mock.ts(520,18): error TS2339: Property 'compatibleVehicleIds' does not exist on type 'Part'.
+src/data/mock.ts(520,45): error TS7006: Parameter 'vid' implicitly has an 'any' type.
+src/navigation/CustomerNavigator.tsx(147,17): error TS2322: Type '({ navigation, route }: Props) => JSX.Element' is not assignable to type 'ScreenComponentType<CategoriesStackParamList, "PartDetails"> | undefined'.
+  Type '({ navigation, route }: Props) => JSX.Element' is not assignable to type 'FunctionComponent<{}>'.
+    Types of parameters '__0' and 'props' are incompatible.
+      Type '{}' is missing the following properties from type 'Props': navigation, route
+src/screens/customer/CategorySelectionScreen.tsx(118,26): error TS2304: Cannot find name 'brandName'.
+src/screens/customer/CategorySelectionScreen.tsx(137,21): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: FlatListProps<Category>): FlatList<Category>', gave the following error.
+    Type '(item: Category) => number' is not assignable to type '(item: Category, index: number) => string'.
+      Type 'number' is not assignable to type 'string'.
+  Overload 2 of 2, '(props: FlatListProps<Category>, context: any): FlatList<Category>', gave the following error.
+    Type '(item: Category) => number' is not assignable to type '(item: Category, index: number) => string'.
+      Type 'number' is not assignable to type 'string'.
+src/screens/customer/FavoritesScreen.tsx(149,37): error TS2322: Type 'number' is not assignable to type 'string'.
+src/screens/customer/PartDetailsScreen.tsx(260,47): error TS2339: Property 'nameAr' does not exist on type '{}'.
+src/screens/customer/PartDetailsScreen.tsx(263,47): error TS2339: Property 'name_ar' does not exist on type '{}'.
+src/screens/customer/PartDetailsScreen.tsx(278,18): error TS2304: Cannot find name 'compatibleVehicles'.
+src/screens/customer/PartDetailsScreen.tsx(284,30): error TS2304: Cannot find name 'compatibleVehicles'.
+src/screens/customer/PartDetailsScreen.tsx(284,54): error TS7006: Parameter 'vehicle' implicitly has an 'any' type.
+src/screens/customer/PartDetailsScreen.tsx(303,35): error TS2551: Property 'storeName' does not exist on type 'Seller'. Did you mean 'store_name'?
+src/screens/customer/SearchResultsScreen.tsx(76,58): error TS2322: Type 'number' is not assignable to type 'never'.
+src/screens/seller/AddPartScreen.tsx(79,39): error TS2339: Property 'title' does not exist on type 'ApiResponse<any>'.
+src/screens/seller/AddPartScreen.tsx(80,39): error TS2339: Property 'price' does not exist on type 'ApiResponse<any>'.
+src/screens/seller/AddPartScreen.tsx(81,45): error TS2339: Property 'description' does not exist on type 'ApiResponse<any>'.
+src/screens/seller/AddPartScreen.tsx(82,43): error TS2339: Property 'status' does not exist on type 'ApiResponse<any>'.
+src/screens/seller/AddPartScreen.tsx(82,58): error TS2339: Property 'condition' does not exist on type 'ApiResponse<any>'.
+src/screens/seller/AddPartScreen.tsx(83,44): error TS2339: Property 'category_id' does not exist on type 'ApiResponse<any>'.
+src/screens/seller/AddPartScreen.tsx(83,64): error TS2339: Property 'categoryId' does not exist on type 'ApiResponse<any>'.
+src/services/api.ts(403,13): error TS2353: Object literal may only specify known properties, and 'sort_by' does not exist in type '{ make?: string | undefined; model?: string | undefined; part_name?: string | undefined; condition?: string | undefined; page?: number | undefined; }'.

@@ -1,0 +1,18 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:8081",
+  "loginUser": "test@customer.com",
+  "loginPassword": "password",
+  "executionArgs": {
+    "projectName": "laqeetha-app",
+    "projectPath": "c:\\laragon\\www\\spare-parts-marketplace\\react native project\\laqeetha-app",
+    "testIds": [],
+    "additionalInstruction": "Focus on verifying that PartDetailsScreen, HomeScreen, and SearchResultsScreen do not crash when rendering. Ensure API calls are mocked or handled gracefully if the backend is unreachable.",
+    "envs": {
+      "API_KEY": "sk-user-i5g0lQGxo9SJ8KMA5Mct3UFSuRikGM1pAeXUKr2_MBcybuyYApg1-E2h6xlAu4kM_P7Gp5VO_0qxJO7CeKKoTExRbqWrneKZtAs8m5qbOJYM6hcpN28IF2i70JMHx2t7rY4"
+    }
+  },
+  "proxy": "http://4f0a275d-d3ac-48ca-8827-5a93f193e7df:ZGJKz3URoaGkMfXnedp4luAAOvgYEu3o@tun.testsprite.com:8080"
+}

@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\Parts\Schemas;
 
+use App\Models\Seller;
+use App\Models\StandardPart;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class PartForm
@@ -13,59 +15,58 @@ class PartForm
     {
         return $schema
             ->components([
-            Select::make('seller_id')
-                ->relationship('seller', 'store_name')
-                ->searchable()
-                ->preload()
-                ->required()
-                ->label('Seller Store (المتجر)'),
+                Select::make('seller_id')
+                    ->label('المتجر')
+                    ->options(Seller::pluck('store_name', 'id'))
+                    ->searchable()
+                    ->required(),
 
-            Select::make('standard_part_id')
-                ->relationship('standardPart', 'name')
-                ->searchable()
-                ->preload()
-                ->required()
-                ->label('Standard Part Name (الاسم الموحد)'),
+                Select::make('standard_part_id')
+                    ->label('القطعة المعيارية')
+                    ->options(StandardPart::pluck('name_ar', 'id'))
+                    ->searchable()
+                    ->required(),
 
-            // 2. علاقة Many-to-Many مع المركبات (Vehicles)
-            // ✅ هذا المكون يقوم بتحديث جدول part_vehicle تلقائياً
-            Select::make('vehicles')
-                ->relationship('vehicles', 'model') // اسم العلاقة واسم العمود المراد عرضه
-                ->multiple() // تسمح باختيار عدة مركبات لنفس القطعة
-                ->searchable()
-                ->preload()
-                ->label('Compatible Vehicles (المركبات المتوافقة)'),
+                TextInput::make('extra_name')
+                    ->label('اسم إضافي')
+                    ->maxLength(255),
 
-            // 3. بيانات القطعة الأساسية
-            TextInput::make('price')
-                ->numeric()
-                ->required()
-                ->prefix('YER'), // العملة الافتراضية
+                TextInput::make('price')
+                    ->label('السعر')
+                    ->numeric()
+                    ->required()
+                    ->prefix('ر.ي'),
 
-            Select::make('status')
-                ->options([
-                    'new' => 'New (جديد)',
-                    'used' => 'Used (مستعمل)',
-                    'renewed' => 'Renewed (مجدد)',
-                ])
-                ->required(),
+                Select::make('status')
+                    ->label('الحالة')
+                    ->options([
+                        'new' => 'جديد',
+                        'used' => 'مستعمل',
+                        'renewed' => 'مجدد',
+                    ])
+                    ->required(),
 
-            Select::make('quality')
-                ->options([
-                    'original' => 'Original (أصلي)',
-                    'commercial' => 'Commercial (تجاري)',
-                    'chinese' => 'Chinese (صيني)',
-                    'other' => 'Other (آخر)',
-                ])
-                ->required(),
+                Select::make('quality')
+                    ->label('الجودة')
+                    ->options([
+                        'original' => 'أصلي',
+                        'commercial' => 'تجاري',
+                        'chinese' => 'صيني',
+                        'other' => 'آخر',
+                    ])
+                    ->required(),
 
-            TextInput::make('extra_name')
-                ->maxLength(255)
-                ->nullable()
-                ->label('Seller Specific Name'),
+                Select::make('vehicles')
+                    ->label('المركبات المتوافقة')
+                    ->relationship('vehicles', 'model')
+                    ->multiple()
+                    ->searchable()
+                    ->preload(),
 
-            Textarea::make('description')
-                ->maxLength(65535)->columns(2), // تقسيم الحقول في عمودين
-                ]);
+                Textarea::make('description')
+                    ->label('وصف القطعة')
+                    ->rows(3)
+                    ->maxLength(65535),
+            ]);
     }
 }

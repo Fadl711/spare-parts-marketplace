@@ -1,0 +1,292 @@
+{
+  "meta": {
+    "project": "Laqeetha Auto Spare Parts Marketplace",
+    "date": "2026-01-15",
+    "prepared_by": "Software Development Manager"
+  },
+  "product_overview": "Laqeetha is an auto spare parts marketplace platform that connects customers and sellers through a comprehensive API backend built with Laravel, facilitating vehicle parts search, seller and customer authentication, and core auto data access.",
+  "core_goals": [
+    "Provide secure and streamlined customer authentication including registration, login, and logout.",
+    "Enable seller registration and authentication to onboard parts suppliers effectively.",
+    "Offer comprehensive public APIs for core automotive data such as vehicles, categories, and parts types.",
+    "Facilitate searchable marketplace functionality allowing users to find and view detailed auto parts information.",
+    "Ensure a scalable backend architecture with Laravel 11 and API security via Sanctum."
+  ],
+  "key_features": [
+    "Customer authentication system supporting registration, login, and logout secured through Sanctum tokens.",
+    "Seller authentication including store registration and secure login mechanisms.",
+    "Public APIs providing detailed lists of vehicles, categories, and subcategories relevant to auto parts.",
+    "Marketplace endpoints allowing search queries by vehicle make and model to retrieve applicable parts.",
+    "Use of Laravel 11 framework together with MySQL database for robust and efficient back-end operations.",
+    "API documentation compliant with OpenAPI 3.0 standards for clear integration and maintenance."
+  ],
+  "user_flow_summary": [
+    "Customers register by providing name, phone number, password, and device name; then log in to access marketplace features.",
+    "Sellers register with store details, owner information, location, and credentials for store management access.",
+    "Users query vehicles, categories, and parts through public endpoints to browse available auto spare parts.",
+    "Authenticated customers and sellers log out securely, invalidating their tokens.",
+    "Users perform parts search by specifying vehicle make and model parameters to find matching parts."
+  ],
+  "validation_criteria": [
+    "Successful creation of customer and seller accounts verified by appropriate 201 API responses.",
+    "Authentication endpoints correctly validate credentials and return 200 for successful logins, 401 for failures.",
+    "Public data endpoints return accurate and complete lists of vehicles, categories, and parts with 200 responses.",
+    "Marketplace search returns relevant parts data filtered by vehicle make and model.",
+    "Security mechanisms via Sanctum ensure that protected routes like logout enforce valid authentication tokens.",
+    "Complete backend setup as per README instructions producing a running Laravel server with seeded database."
+  ],
+  "code_summary": {
+    "tech_stack": [
+      "PHP",
+      "Laravel 11",
+      "MySQL",
+      "Sanctum"
+    ],
+    "features": [
+      {
+        "name": "Customer Authentication",
+        "description": "Customer registration, login, and logout functionality using Sanctum.",
+        "files": [
+          "app/Http/Controllers/Api/V1/Auth/CustomerAuthController.php",
+          "app/Models/Customer.php",
+          "routes/api.php"
+        ],
+        "api_doc": {
+          "openapi": "3.0.0",
+          "paths": {
+            "/api/v1/customer/register": {
+              "post": {
+                "summary": "Register a new customer",
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "required": [
+                          "name",
+                          "phone",
+                          "password",
+                          "device_name"
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "phone": {
+                            "type": "string"
+                          },
+                          "password": {
+                            "type": "string"
+                          },
+                          "password_confirmation": {
+                            "type": "string"
+                          },
+                          "device_name": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "responses": {
+                  "201": {
+                    "description": "Account created successfully"
+                  }
+                }
+              }
+            },
+            "/api/v1/customer/login": {
+              "post": {
+                "summary": "Customer login",
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "required": [
+                          "phone",
+                          "password",
+                          "device_name"
+                        ],
+                        "properties": {
+                          "phone": {
+                            "type": "string"
+                          },
+                          "password": {
+                            "type": "string"
+                          },
+                          "device_name": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "responses": {
+                  "200": {
+                    "description": "Login successful"
+                  },
+                  "401": {
+                    "description": "Invalid credentials"
+                  }
+                }
+              }
+            },
+            "/api/v1/customer/logout": {
+              "post": {
+                "summary": "Customer logout",
+                "security": [
+                  {
+                    "bearerAuth": []
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "Logged out successfully"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Seller Authentication",
+        "description": "Seller registration and login functionality.",
+        "files": [
+          "app/Http/Controllers/Api/V1/Auth/SellerAuthController.php",
+          "app/Models/Seller.php",
+          "routes/api.php"
+        ],
+        "api_doc": {
+          "openapi": "3.0.0",
+          "paths": {
+            "/api/v1/seller/register": {
+              "post": {
+                "summary": "Register a new seller",
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "required": [
+                          "store_name",
+                          "owner_name",
+                          "phone",
+                          "password",
+                          "city",
+                          "district",
+                          "device_name"
+                        ],
+                        "properties": {
+                          "store_name": {
+                            "type": "string"
+                          },
+                          "owner_name": {
+                            "type": "string"
+                          },
+                          "phone": {
+                            "type": "string"
+                          },
+                          "password": {
+                            "type": "string"
+                          },
+                          "city": {
+                            "type": "string"
+                          },
+                          "district": {
+                            "type": "string"
+                          },
+                          "device_name": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "responses": {
+                  "201": {
+                    "description": "Store registered successfully"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Core Data",
+        "description": "Public APIs for retrieving vehicles, categories, and part types.",
+        "files": [
+          "app/Http/Controllers/Api/V1/CoreDataController.php",
+          "app/Models/Vehicle.php",
+          "app/Models/Category.php",
+          "app/Models/Subcategory.php",
+          "routes/api.php"
+        ],
+        "api_doc": {
+          "openapi": "3.0.0",
+          "paths": {
+            "/api/v1/vehicles": {
+              "get": {
+                "responses": {
+                  "200": {
+                    "description": "List of vehicles"
+                  }
+                }
+              }
+            },
+            "/api/v1/categories": {
+              "get": {
+                "responses": {
+                  "200": {
+                    "description": "List of categories"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Marketplace",
+        "description": "Search parts and view details.",
+        "files": [
+          "app/Http/Controllers/Api/V1/MarketplaceController.php",
+          "app/Models/Part.php",
+          "routes/api.php"
+        ],
+        "api_doc": {
+          "openapi": "3.0.0",
+          "paths": {
+            "/api/v1/parts": {
+              "get": {
+                "parameters": [
+                  {
+                    "name": "make",
+                    "in": "query"
+                  },
+                  {
+                    "name": "model",
+                    "in": "query"
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "List of parts"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

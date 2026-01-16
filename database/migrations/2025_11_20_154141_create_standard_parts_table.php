@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('standard_parts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('subcategory_id')->constrained('categories')->cascadeOnDelete();
-            $table->string('name', 150);
+            $table->foreignId('subcategory_id')->constrained('subcategories')->cascadeOnDelete();
+            $table->string('name_ar', 150);
+            $table->string('name_en', 150)->nullable();
         });
     }
 

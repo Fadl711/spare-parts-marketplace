@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('phone', 20)->unique();
             $table->string('email', 100)->nullable()->unique();
             $table->string('city', 100);
+            $table->string('district', 100)->nullable();
             $table->string('address', 255);
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();

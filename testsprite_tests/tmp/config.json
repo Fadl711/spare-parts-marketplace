@@ -1,0 +1,17 @@
+{
+  "status": "commited",
+  "type": "backend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:8000",
+  "backendAuthType": "public",
+  "executionArgs": {
+    "projectName": "spare-parts-marketplace",
+    "projectPath": "c:\\laragon\\www\\spare-parts-marketplace",
+    "testIds": [],
+    "additionalInstruction": "Implement a comprehensive test suite for Laqeetha APIs.\nScenarios:\n1. Bootstrap:\n   - Register a customer (POST /customer/register).\n   - Extract the 'token' from the response.\n   - Store 'token' in a global variable for subsequent requests.\n2. Authentication:\n   - Login Customer (POST /customer/login).\n   - Logout Customer (POST /customer/logout) using Authorization header.\n   - Register Seller (POST /seller/register).\n   - Login Seller (POST /seller/login).\n3. Core Data:\n   - GET /vehicles\n   - GET /categories\n   - GET /part-types\n4. Marketplace:\n   - GET /parts\n   - GET /parts/{id} (use an ID from search results or seeder).\n   - GET /parts?make=Toyota\n   - GET /parts?make=Toyota&model=Corolla\nChecks per test:\n   - Status Code (200/201).\n   - JSON structure valid.\n   - Required data fields presence.\nHeaders:\n   - Authorization: Bearer {token} (use the globally stored token).\nOutput:\n   - Generate a clear Pass/Fail report.",
+    "envs": {
+      "API_KEY": "sk-user-i5g0lQGxo9SJ8KMA5Mct3UFSuRikGM1pAeXUKr2_MBcybuyYApg1-E2h6xlAu4kM_P7Gp5VO_0qxJO7CeKKoTExRbqWrneKZtAs8m5qbOJYM6hcpN28IF2i70JMHx2t7rY4"
+    }
+  },
+  "proxy": "http://1c2cebf0-6bc9-4f13-96e4-efd75c982b1a:bcS2R2Uc1VFrYF2sGHntJdc84UmeVxyZ@tun.testsprite.com:8080"
+}

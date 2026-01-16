@@ -30,7 +30,7 @@ class MarketplaceController extends Controller
             $query->where(function ($q) use ($partName) {
                 $q->whereHas('standardPart', function ($subQ) use ($partName) {
                     $subQ->where('name_ar', 'like', "%{$partName}%")
-                         ->orWhere('name_en', 'like', "%{$partName}%");
+                        ->orWhere('name_en', 'like', "%{$partName}%");
                 })->orWhere('extra_name', 'like', "%{$partName}%");
             });
         }
@@ -51,7 +51,11 @@ class MarketplaceController extends Controller
                 'currency' => 'YER',
                 'condition' => $part->status,
                 'quality' => $part->quality,
-                'image_urls' => $part->images->map(fn($img) => url('images-proxy/parts/' . basename($img->image_path)))->toArray(),
+                'image_urls' => $part->images->map(function ($img) {
+                    $normalizedPath = str_replace('\\', '/', $img->image_path);
+                    $filename = basename($normalizedPath);
+                    return url('images-proxy/parts/' . $filename);
+                })->toArray(),
                 'seller' => [
                     'id' => $part->seller->id,
                     'store_name' => $part->seller->store_name,
@@ -84,7 +88,11 @@ class MarketplaceController extends Controller
             'data' => [
                 'id' => $part->id,
                 'title' => $part->standardPart ? ($part->standardPart->name_ar ?? $part->standardPart->name_en) : $part->extra_name,
-                'image_urls' => $part->images->map(fn($img) => url('images-proxy/parts/' . basename($img->image_path)))->toArray(),
+                'image_urls' => $part->images->map(function ($img) {
+                    $normalizedPath = str_replace('\\', '/', $img->image_path);
+                    $filename = basename($normalizedPath);
+                    return url('images-proxy/parts/' . $filename);
+                })->toArray(),
                 'price' => $part->price,
                 'currency' => 'YER',
                 'condition' => $part->status,
@@ -100,7 +108,7 @@ class MarketplaceController extends Controller
                     ],
                     'phones' => [$part->seller->phone],
                     'whatsapp' => $part->seller->whatsapp_link,
-                    'logo' => $part->seller->store_logo_path ? url('images-proxy/sellers/' . basename($part->seller->store_logo_path)) : null,
+                    'logo' => $part->seller->store_logo_path ? url('images-proxy/sellers/' . basename(str_replace('\\', '/', $part->seller->store_logo_path))) : null,
                 ],
                 'vehicles' => $part->vehicles->map(fn($v) => "{$v->make} {$v->model} ({$v->year_from}-{$v->year_to})")->unique()->values(),
                 'created_at' => $part->created_at->format('Y-m-d'),

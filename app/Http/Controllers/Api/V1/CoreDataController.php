@@ -22,8 +22,8 @@ class CoreDataController extends Controller
     public function getCategories()
     {
         $categories = Category::all()->map(function ($category) {
-            $category->image_url = $category->image_url 
-                ? url('images-proxy/categories/' . basename($category->image_url))
+            $category->image_url = $category->image_url
+                ? url('images-proxy/categories/' . basename(str_replace('\\', '/', $category->image_url)))
                 : null;
             return $category;
         });

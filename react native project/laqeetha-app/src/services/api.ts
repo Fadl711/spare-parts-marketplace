@@ -5,9 +5,9 @@ import { Platform } from "react-native";
 // To find your IP: Run "ipconfig" in PowerShell and look for IPv4 Address
 // Example: 192.168.1.5, 192.168.0.100, etc.
 
-const YOUR_COMPUTER_IP = "192.168.8.188"; // 👈 UPDATED!
+const YOUR_COMPUTER_IP = "192.168.8.124"; // 👈 UPDATED!
 
-const BASE_URL = `http://${YOUR_COMPUTER_IP}:8000/api/v1`;
+const BASE_URL = `http://${YOUR_COMPUTER_IP}:8080/api/v1`;
 
 const api = axios.create({
     baseURL: BASE_URL,

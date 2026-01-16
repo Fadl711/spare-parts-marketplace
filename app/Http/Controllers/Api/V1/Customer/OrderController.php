@@ -16,7 +16,7 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $customer = $request->user();
-        
+
         $orders = Order::where('customer_id', $customer->id)
             ->with(['part.seller', 'part.standardPart', 'part.images'])
             ->latest()
@@ -31,11 +31,13 @@ class OrderController extends Controller
                 'total_price' => $order->total_price,
                 'part' => [
                     'id' => $order->part->id,
-                    'title' => $order->part->standardPart 
-                        ? ($order->part->standardPart->name_ar ?? $order->part->standardPart->name_en) 
+                    'title' => $order->part->standardPart
+                        ? ($order->part->standardPart->name_ar ?? $order->part->standardPart->name_en)
                         : $order->part->extra_name,
                     'price' => $order->part->price,
-                    'image_url' => $order->part->images->first()->image_path ?? null,
+                    'image_url' => $order->part->images->first()
+                        ? url('images-proxy/parts/' . basename(str_replace('\\', '/', $order->part->images->first()->image_path)))
+                        : null,
                 ],
                 'seller' => [
                     'id' => $order->part->seller->id,
@@ -100,7 +102,6 @@ class OrderController extends Controller
                     'total_price' => $order->total_price,
                 ]
             ], 201);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
@@ -116,7 +117,7 @@ class OrderController extends Controller
     public function show(Request $request, $id)
     {
         $customer = $request->user();
-        
+
         $order = Order::where('customer_id', $customer->id)
             ->with(['part.seller', 'part.standardPart', 'part.images'])
             ->findOrFail($id);
@@ -129,8 +130,8 @@ class OrderController extends Controller
                 'total_price' => $order->total_price,
                 'part' => [
                     'id' => $order->part->id,
-                    'title' => $order->part->standardPart 
-                        ? ($order->part->standardPart->name_ar ?? $order->part->standardPart->name_en) 
+                    'title' => $order->part->standardPart
+                        ? ($order->part->standardPart->name_ar ?? $order->part->standardPart->name_en)
                         : $order->part->extra_name,
                     'price' => $order->part->price,
                     'status' => $order->part->status,

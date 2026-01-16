@@ -4,6 +4,7 @@ module.exports = {
     "./App.{js,jsx,ts,tsx}",
     "./src/**/*.{js,jsx,ts,tsx}"
   ],
+  darkMode: 'class', // Fixes "Cannot manually set color scheme" error
   presets: [require("nativewind/preset")],
   theme: {
     extend: {

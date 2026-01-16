@@ -14,8 +14,8 @@ class PartResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->standardPart 
-                ? ($this->standardPart->name_ar ?? $this->standardPart->name_en) 
+            'title' => $this->standardPart
+                ? ($this->standardPart->name_ar ?? $this->standardPart->name_en)
                 : $this->extra_name,
             'price' => (float) $this->price,
             'currency' => 'YER',
@@ -25,10 +25,14 @@ class PartResource extends JsonResource
             'extra_name' => $this->extra_name,
             'images' => $this->whenLoaded('images', function () {
                 return $this->images->map(function ($image) {
+                    $normalizedPath = str_replace('\\', '/', $image->image_path);
+                    $filename = basename($normalizedPath);
+                    $imageUrl = url('images-proxy/parts/' . $filename);
+
                     return [
                         'id' => $image->id,
-                        'url' => $image->image_path,
-                        'thumbnail' => $image->image_path, // Could add thumbnail logic
+                        'url' => $imageUrl,
+                        'thumbnail' => $imageUrl, // Could add thumbnail logic
                     ];
                 });
             }),

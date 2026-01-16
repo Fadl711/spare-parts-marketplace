@@ -15,7 +15,7 @@ class FavoriteController extends Controller
     public function index(Request $request)
     {
         $customer = $request->user();
-        
+
         $favorites = CustomerFavorite::where('customer_id', $customer->id)
             ->with(['part.seller', 'part.images', 'part.standardPart'])
             ->latest()
@@ -27,14 +27,16 @@ class FavoriteController extends Controller
                 'id' => $favorite->id,
                 'part' => [
                     'id' => $favorite->part->id,
-                    'title' => $favorite->part->standardPart 
-                        ? ($favorite->part->standardPart->name_ar ?? $favorite->part->standardPart->name_en) 
+                    'title' => $favorite->part->standardPart
+                        ? ($favorite->part->standardPart->name_ar ?? $favorite->part->standardPart->name_en)
                         : $favorite->part->extra_name,
                     'price' => $favorite->part->price,
                     'currency' => 'YER',
                     'status' => $favorite->part->status,
                     'quality' => $favorite->part->quality,
-                    'image_url' => $favorite->part->images->first()->image_path ?? null,
+                    'image_url' => $favorite->part->images->first()
+                        ? url('images-proxy/parts/' . basename(str_replace('\\', '/', $favorite->part->images->first()->image_path)))
+                        : null,
                     'seller' => [
                         'id' => $favorite->part->seller->id,
                         'store_name' => $favorite->part->seller->store_name,

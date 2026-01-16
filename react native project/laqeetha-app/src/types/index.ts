@@ -16,6 +16,7 @@ export interface Seller {
     owner_name?: string;
     email?: string;
     phone: string;
+    phones?: string[]; // API returns phones as array
     whatsapp?: string;
     location: {
         city: string;

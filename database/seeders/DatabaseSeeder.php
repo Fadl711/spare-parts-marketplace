@@ -18,91 +18,40 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-                Admin::create([
+        // Create Admin
+        Admin::create([
             'username' => 'admin',
             'password' => Hash::make('password'),
             'role' => 'super_admin',
             'is_active' => true,
         ]);
-        // 1. Create Seller
-        $seller = Seller::create([
-            'store_name' => 'Al-Amal Parts',
-            'owner_name' => 'Khalid',
-            'phone' => '96650000000',
-            'email' => 'seller@example.com',
-            'city' => 'Riyadh',
-            'district' => 'Malaz',
-            'address' => 'King Fahd Road',
+
+        // Create Test Customer
+        \App\Models\Customer::create([
+            'name' => 'Test Customer',
+            'email' => 'test@customer.com',
+            'phone' => '0777777777',
             'password' => Hash::make('password'),
-            'opening_hours' => json_encode(['sat' => '9-5']),
+            'city' => 'Sanaa',
+            'is_active' => true,
         ]);
 
-        // 2. Create Vehicle
-        $vehicle = Vehicle::create([
-            'make' => 'Toyota',
-            'model' => 'Camry',
-            'year_from' => 2018,
-            'year_to' => 2024,
-            'type' => 'car',
+        // Create Test Seller
+        \App\Models\Seller::create([
+            'store_name' => 'Test Store',
+            'owner_name' => 'Test Seller',
+            'email' => 'test@seller.com',
+            'phone' => '0788888888',
+            'password' => Hash::make('password'),
+            'city' => 'Sanaa',
+            'district' => 'Test District',
+            'address' => 'Test Address',
+            'is_approved' => true,
+            'is_active' => true,
         ]);
 
-        // 3. Create Category
-        $category = Category::create([
-            'name_ar' => 'Body',
-            'name_en' => 'Body',
-            'image_url' => 'body.jpg'
-        ]);
-
-        // 4. Create Subcategory
-        $subcategory = Subcategory::create([
-            'category_id' => $category->id,
-            'name_ar' => 'Bumpers',
-            'name_en' => 'Bumpers',
-        ]);
-
-        // 5. Create Standard Part
-        $standardPart = StandardPart::create([
-            'subcategory_id' => $subcategory->id,
-            'name_ar' => 'Front Bumper',
-            'name_en' => 'Front Bumper',
-        ]);
-
-        // 6. Create Part (فقط الأعمدة الموجودة فعليًا)
-        $part = Part::create([
-            'seller_id' => $seller->id,
-            'standard_part_id' => $standardPart->id,
-            'price' => 500,
-            'status' => 'used',
-            'quality' => 'original',
-        ]);
-
-        // 7. Link Part to Vehicle
-        DB::table('part_vehicle')->insert([
-            'part_id' => $part->id,
-            'vehicle_id' => $vehicle->id,
-        ]);
-
-        // 8. Create Images
-        Image::create([
-            'part_id' => $part->id,
-            'image_path' => 'img1.jpg'
-        ]);
-
-        Image::create([
-            'part_id' => $part->id,
-            'image_path' => 'img2.jpg'
-        ]);
-
-        // 9. Guarantee Part with ID = 1 exists
-        Part::updateOrCreate(
-            ['id' => 1],
-            [
-                'seller_id' => $seller->id,
-                'standard_part_id' => $standardPart->id,
-                'price' => 999,
-                'status' => 'new',
-                'quality' => 'original'
-            ]
-        );
+        echo "Test users created:\n";
+        echo "Customer: test@customer.com / password\n";
+        echo "Seller: test@seller.com / password\n";
     }
 }

@@ -28,7 +28,7 @@ class SellerPanelProvider extends PanelProvider
             ->path('seller')
             ->brandName('لَقِيتَها - لوحة التاجر')
             ->login()
-            ->profile()
+            ->profile(\App\Filament\Seller\Pages\EditProfile::class)
             ->colors([
                 'primary' => Color::Blue,
             ])

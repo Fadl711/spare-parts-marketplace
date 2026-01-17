@@ -33,7 +33,6 @@ class DatabaseSeeder extends Seeder
             'phone' => '0777777777',
             'password' => Hash::make('password'),
             'city' => 'Sanaa',
-            'is_active' => true,
         ]);
 
         // Create Test Seller
@@ -46,8 +45,6 @@ class DatabaseSeeder extends Seeder
             'city' => 'Sanaa',
             'district' => 'Test District',
             'address' => 'Test Address',
-            'is_approved' => true,
-            'is_active' => true,
         ]);
 
         echo "Test users created:\n";

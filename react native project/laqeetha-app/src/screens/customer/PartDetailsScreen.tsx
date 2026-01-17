@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   Dimensions,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteProp } from "@react-navigation/native";
@@ -40,9 +41,8 @@ const PartDetailsScreen = ({ navigation, route }: Props) => {
   const [loading, setLoading] = useState(true);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-  // All hooks MUST be before any early returns!
   // Normalize images to string URLs
-  const imageUrls: string[] = React.useMemo(() => {
+  const imageUrls: string[] = useMemo(() => {
     if (!part) return [];
     if (part.image_urls && part.image_urls.length > 0) return part.image_urls;
     if (part.imageUrls && part.imageUrls.length > 0) return part.imageUrls;
@@ -57,7 +57,6 @@ const PartDetailsScreen = ({ navigation, route }: Props) => {
         const response = await ApiService.getPartDetails(partId);
         // Handle different response structures gracefully
         const data = response.data || response;
-        console.log("Part details loaded:", data);
         setPart(data);
       } catch (error) {
         console.error("Failed to load part details:", error);
@@ -68,10 +67,16 @@ const PartDetailsScreen = ({ navigation, route }: Props) => {
     fetchPartDetails();
   }, [partId]);
 
-  // Early returns AFTER all hooks
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center bg-white">
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "white",
+        }}
+      >
         <ActivityIndicator size="large" color="#0284c7" />
       </View>
     );
@@ -79,13 +84,22 @@ const PartDetailsScreen = ({ navigation, route }: Props) => {
 
   if (!part) {
     return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <Text className="text-gray-500 text-lg">القطعة غير موجودة</Text>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "white",
+        }}
+      >
+        <Text style={{ color: "#6b7280", fontSize: 18 }}>
+          القطعة غير موجودة
+        </Text>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          className="mt-4 p-4"
+          style={{ marginTop: 16, padding: 16 }}
         >
-          <Text className="text-blue-600">عودة</Text>
+          <Text style={{ color: "#2563eb" }}>عودة</Text>
         </TouchableOpacity>
       </View>
     );
@@ -102,46 +116,46 @@ const PartDetailsScreen = ({ navigation, route }: Props) => {
   };
 
   const handleCall = () => {
-    // Handle both phone (string) and phones (array) formats
+    // Try explicit phone field first, then phones array
     const phoneNumber =
-      seller.phones && seller.phones.length > 0
-        ? seller.phones[0]
-        : seller.phone;
+      seller.phone ||
+      (seller.phones && seller.phones.length > 0 ? seller.phones[0] : null);
 
     if (phoneNumber) {
       Linking.openURL(`tel:${phoneNumber}`);
+    } else {
+      // alert("رقم الهاتف غير متوفر");
     }
   };
 
   const handleWhatsApp = () => {
-    const whatsappNumber = seller.whatsapp;
+    const whatsappNumber =
+      seller.whatsapp ||
+      seller.phone ||
+      (seller.phones && seller.phones.length > 0 ? seller.phones[0] : null);
+
     if (whatsappNumber) {
       const message = encodeURIComponent(`مرحباً، أنا مهتم بـ: ${part.title}`);
-      // Remove non-numeric characters
+      // Remove non-numeric characters for the link
       const phone = whatsappNumber.replace(/[^0-9]/g, "");
-      Linking.openURL(`https://wa.me/${phone}?text=${message}`);
-    } else {
-      // Fallback to using phone number for WhatsApp
-      const phoneNumber =
-        seller.phones && seller.phones.length > 0
-          ? seller.phones[0]
-          : seller.phone;
 
-      if (phoneNumber) {
-        const message = encodeURIComponent(
-          `مرحباً، أنا مهتم بـ: ${part.title}`
-        );
-        const phone = phoneNumber.replace(/[^0-9]/g, "");
-        Linking.openURL(`https://wa.me/${phone}?text=${message}`);
-      }
+      const url = `whatsapp://send?phone=${phone}&text=${message}`;
+
+      Linking.canOpenURL(url).then((supported) => {
+        if (supported) {
+          Linking.openURL(url);
+        } else {
+          Linking.openURL(`https://wa.me/${phone}?text=${message}`);
+        }
+      });
     }
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
-      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#f9fafb" }}>
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         {/* Image Slider */}
-        <View className="bg-white relative">
+        <View style={{ backgroundColor: "white", position: "relative" }}>
           {imageUrls.length > 0 ? (
             <>
               <ScrollView
@@ -167,13 +181,27 @@ const PartDetailsScreen = ({ navigation, route }: Props) => {
 
               {/* Indicators */}
               {imageUrls.length > 1 && (
-                <View className="absolute bottom-4 left-0 right-0 flex-row justify-center">
+                <View
+                  style={{
+                    position: "absolute",
+                    bottom: 16,
+                    left: 0,
+                    right: 0,
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
                   {imageUrls.map((_: any, index: number) => (
                     <View
                       key={index}
-                      className={`w-2 h-2 rounded-full mx-1 ${
-                        index === activeImageIndex ? "bg-blue-600" : "bg-white"
-                      }`}
+                      style={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: 4,
+                        marginHorizontal: 4,
+                        backgroundColor:
+                          index === activeImageIndex ? "#2563eb" : "white",
+                      }}
                     />
                   ))}
                 </View>
@@ -181,50 +209,110 @@ const PartDetailsScreen = ({ navigation, route }: Props) => {
             </>
           ) : (
             <View
-              style={{ width, height: 300 }}
-              className="bg-gray-100 items-center justify-center"
+              style={{
+                width,
+                height: 300,
+                backgroundColor: "#f3f4f6",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
               <Ionicons name="image-outline" size={64} color="#ccc" />
-              <Text className="text-gray-400 mt-2">لا توجد صور</Text>
+              <Text style={{ color: "#9ca3af", marginTop: 8 }}>
+                لا توجد صور
+              </Text>
             </View>
           )}
 
           {/* Back Button Overlay */}
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            className="absolute top-4 left-4 bg-white/80 p-2 rounded-full"
+            style={{
+              position: "absolute",
+              top: Platform.OS === "ios" ? 16 : 16,
+              left: 16,
+              backgroundColor: "rgba(255,255,255,0.8)",
+              padding: 8,
+              borderRadius: 9999,
+            }}
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
         </View>
 
         {/* Part Info */}
-        <View className="bg-white mt-2 px-6 py-5">
-          <Text className="text-gray-900 text-2xl font-bold mb-3 text-right">
+        <View
+          style={{
+            backgroundColor: "white",
+            marginTop: 8,
+            paddingHorizontal: 24,
+            paddingVertical: 20,
+          }}
+        >
+          <Text
+            style={{
+              color: "#111827",
+              fontSize: 24,
+              fontWeight: "bold",
+              marginBottom: 12,
+              textAlign: "right",
+            }}
+          >
             {part.title || "بدون عنوان"}
           </Text>
-          <Text className="text-blue-600 text-3xl font-bold mb-4 text-right">
+          <Text
+            style={{
+              color: "#2563eb",
+              fontSize: 30,
+              fontWeight: "bold",
+              marginBottom: 16,
+              textAlign: "right",
+            }}
+          >
             {formatPrice(part.price)}
           </Text>
 
           {/* Description */}
-          <Text className="text-gray-700 text-base leading-6 mb-4 text-right">
+          <Text
+            style={{
+              color: "#374151",
+              fontSize: 16,
+              lineHeight: 24,
+              marginBottom: 16,
+              textAlign: "right",
+            }}
+          >
             {part.description || "لا يوجد وصف"}
           </Text>
 
           {/* Badges */}
-          <View className="flex-row flex-wrap mb-4 justify-end">
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              marginBottom: 16,
+              justifyContent: "flex-end",
+            }}
+          >
             <View
-              className={`px-4 py-2 rounded-full ml-2 mb-2 ${
-                part.condition === "new" ? "bg-green-100" : "bg-yellow-100"
-              }`}
+              style={{
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                borderRadius: 9999,
+                marginLeft: 8,
+                marginBottom: 8,
+                backgroundColor:
+                  part.condition === "new" ? "#dcfce7" : "#fef9c3",
+              }}
             >
               <Text
-                className={`font-semibold ${
-                  part.condition === "new" || part.status === "new"
-                    ? "text-green-700"
-                    : "text-yellow-700"
-                }`}
+                style={{
+                  fontWeight: "600",
+                  color:
+                    part.condition === "new" || part.status === "new"
+                      ? "#15803d"
+                      : "#a16207",
+                }}
               >
                 {part.condition === "new" || part.status === "new"
                   ? "✨ جديد"
@@ -233,16 +321,21 @@ const PartDetailsScreen = ({ navigation, route }: Props) => {
             </View>
 
             <View
-              className={`px-4 py-2 rounded-full ml-2 mb-2 ${
-                part.quality === "original" ? "bg-blue-100" : "bg-purple-100"
-              }`}
+              style={{
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                borderRadius: 9999,
+                marginLeft: 8,
+                marginBottom: 8,
+                backgroundColor:
+                  part.quality === "original" ? "#dbeafe" : "#f3e8ff",
+              }}
             >
               <Text
-                className={`font-semibold ${
-                  part.quality === "original"
-                    ? "text-blue-700"
-                    : "text-purple-700"
-                }`}
+                style={{
+                  fontWeight: "600",
+                  color: part.quality === "original" ? "#1d4ed8" : "#7e22ce",
+                }}
               >
                 {part.quality === "original" ? "🏆 أصلي" : "💼 تجاري"}
               </Text>
@@ -251,37 +344,97 @@ const PartDetailsScreen = ({ navigation, route }: Props) => {
         </View>
 
         {/* Specifications */}
-        <View className="bg-white mt-2 px-6 py-5">
-          <Text className="text-gray-900 text-xl font-bold mb-4 text-right">
+        <View
+          style={{
+            backgroundColor: "white",
+            marginTop: 8,
+            paddingHorizontal: 24,
+            paddingVertical: 20,
+          }}
+        >
+          <Text
+            style={{
+              color: "#111827",
+              fontSize: 20,
+              fontWeight: "bold",
+              marginBottom: 16,
+              textAlign: "right",
+            }}
+          >
             المواصفات
           </Text>
-          <View className="space-y-3">
+          <View>
             {part.partNumber && (
-              <View className="flex-row justify-between py-2 border-b border-gray-100">
-                <Text className="text-gray-700">{part.partNumber}</Text>
-                <Text className="text-gray-500">رقم القطعة</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingVertical: 8,
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#f3f4f6",
+                }}
+              >
+                <Text style={{ color: "#374151" }}>{part.partNumber}</Text>
+                <Text style={{ color: "#6b7280" }}>رقم القطعة</Text>
               </View>
             )}
             {category && category.name_ar && (
-              <View className="flex-row justify-between py-2 border-b border-gray-100">
-                <Text className="text-gray-700">{category.name_ar}</Text>
-                <Text className="text-gray-500">الفئة</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingVertical: 8,
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#f3f4f6",
+                }}
+              >
+                <Text style={{ color: "#374151" }}>{category.name_ar}</Text>
+                <Text style={{ color: "#6b7280" }}>الفئة</Text>
               </View>
             )}
-            <View className="flex-row justify-between py-2 border-b border-gray-100">
-              <Text className="text-gray-700">{part.views || 0} مشاهدة</Text>
-              <Text className="text-gray-500">المشاهدات</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                paddingVertical: 8,
+                borderBottomWidth: 1,
+                borderBottomColor: "#f3f4f6",
+              }}
+            >
+              <Text style={{ color: "#374151" }}>{part.views || 0} مشاهدة</Text>
+              <Text style={{ color: "#6b7280" }}>المشاهدات</Text>
             </View>
           </View>
         </View>
 
         {/* Compatible Vehicles */}
         {compatibleVehicles.length > 0 && (
-          <View className="bg-white mt-2 px-6 py-5">
-            <Text className="text-gray-900 text-xl font-bold mb-4 text-right">
+          <View
+            style={{
+              backgroundColor: "white",
+              marginTop: 8,
+              paddingHorizontal: 24,
+              paddingVertical: 20,
+            }}
+          >
+            <Text
+              style={{
+                color: "#111827",
+                fontSize: 20,
+                fontWeight: "bold",
+                marginBottom: 16,
+                textAlign: "right",
+              }}
+            >
               مناسب لـ
             </Text>
-            <View className="flex-row flex-wrap justify-end">
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "flex-end",
+              }}
+            >
               {compatibleVehicles.map((vehicle, index) => {
                 // Handle both string and object formats
                 const isString = typeof vehicle === "string";
@@ -295,13 +448,32 @@ const PartDetailsScreen = ({ navigation, route }: Props) => {
                 return (
                   <View
                     key={isString ? index : vehicle.id}
-                    className="bg-blue-50 px-4 py-2 rounded-lg ml-2 mb-2"
+                    style={{
+                      backgroundColor: "#eff6ff",
+                      paddingHorizontal: 16,
+                      paddingVertical: 8,
+                      borderRadius: 8,
+                      marginLeft: 8,
+                      marginBottom: 8,
+                    }}
                   >
-                    <Text className="text-blue-800 font-semibold text-center">
+                    <Text
+                      style={{
+                        color: "#1e40af",
+                        fontWeight: "600",
+                        textAlign: "center",
+                      }}
+                    >
                       {displayText}
                     </Text>
                     {yearText && (
-                      <Text className="text-blue-600 text-xs text-center">
+                      <Text
+                        style={{
+                          color: "#2563eb",
+                          fontSize: 12,
+                          textAlign: "center",
+                        }}
+                      >
                         {yearText}
                       </Text>
                     )}
@@ -314,13 +486,42 @@ const PartDetailsScreen = ({ navigation, route }: Props) => {
 
         {/* Seller Info */}
         {seller && seller.store_name && (
-          <View className="bg-white mt-2 px-6 py-5 mb-24">
-            <Text className="text-gray-900 text-xl font-bold mb-4 text-right">
+          <View
+            style={{
+              backgroundColor: "white",
+              marginTop: 8,
+              paddingHorizontal: 24,
+              paddingVertical: 20,
+              marginBottom: 96,
+            }}
+          >
+            <Text
+              style={{
+                color: "#111827",
+                fontSize: 20,
+                fontWeight: "bold",
+                marginBottom: 16,
+                textAlign: "right",
+              }}
+            >
               معلومات البائع
             </Text>
-            <View className="bg-gray-50 rounded-2xl p-4">
-              <View className="flex-row items-center justify-between mb-3">
-                <View className="flex-row items-center">
+            <View
+              style={{
+                backgroundColor: "#f9fafb",
+                borderRadius: 16,
+                padding: 16,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: 12,
+                }}
+              >
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
                   {seller.is_approved && (
                     <Ionicons
                       name="checkmark-circle"
@@ -329,24 +530,49 @@ const PartDetailsScreen = ({ navigation, route }: Props) => {
                     />
                   )}
                 </View>
-                <Text className="text-gray-900 text-lg font-bold">
+                <Text
+                  style={{ color: "#111827", fontSize: 18, fontWeight: "bold" }}
+                >
                   {seller.store_name}
                 </Text>
               </View>
 
-              <View className="flex-row items-center justify-end mb-2">
-                <View className="flex-row items-center mr-4">
-                  <Text className="text-gray-600 text-sm ml-1">
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                  marginBottom: 8,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginRight: 16,
+                  }}
+                >
+                  <Text
+                    style={{ color: "#4b5563", fontSize: 14, marginLeft: 4 }}
+                  >
                     ({seller.total_parts || 0})
                   </Text>
                   <Ionicons name="star" size={16} color="#f59e0b" />
-                  <Text className="text-gray-700 font-semibold ml-1">
+                  <Text
+                    style={{
+                      color: "#374151",
+                      fontWeight: "600",
+                      marginLeft: 4,
+                    }}
+                  >
                     {seller.rating ? seller.rating.toFixed(1) : "5.0"}
                   </Text>
                 </View>
 
-                <View className="flex-row items-center">
-                  <Text className="text-gray-600 text-sm mr-1">
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Text
+                    style={{ color: "#4b5563", fontSize: 14, marginRight: 4 }}
+                  >
                     {seller.location?.city || "غير محدد"}
                   </Text>
                   <Ionicons name="location" size={16} color="#6b7280" />
@@ -358,21 +584,56 @@ const PartDetailsScreen = ({ navigation, route }: Props) => {
       </ScrollView>
 
       {/* Sticky Action Bar */}
-      <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 flex-row justify-between">
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: "white",
+          borderTopWidth: 1,
+          borderTopColor: "#e5e7eb",
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
         <TouchableOpacity
-          className="bg-green-600 flex-1 py-3 rounded-xl mr-2 flex-row items-center justify-center"
+          style={{
+            backgroundColor: "#16a34a",
+            flex: 1,
+            paddingVertical: 12,
+            borderRadius: 12,
+            marginRight: 8,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
           onPress={handleCall}
         >
           <Ionicons name="call" size={20} color="white" />
-          <Text className="text-white font-bold ml-2">اتصال</Text>
+          <Text style={{ color: "white", fontWeight: "bold", marginLeft: 8 }}>
+            اتصال
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          className="bg-emerald-500 flex-1 py-3 rounded-xl flex-row items-center justify-center"
+          style={{
+            backgroundColor: "#10b981",
+            flex: 1,
+            paddingVertical: 12,
+            borderRadius: 12,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
           onPress={handleWhatsApp}
         >
           <Ionicons name="logo-whatsapp" size={20} color="white" />
-          <Text className="text-white font-bold ml-2">واتساب</Text>
+          <Text style={{ color: "white", fontWeight: "bold", marginLeft: 8 }}>
+            واتساب
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

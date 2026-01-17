@@ -20,6 +20,17 @@ class Part extends Model
         return $this->belongsTo(StandardPart::class);
     }
 
+    // علاقات إضافية للوصول للفئات بسهولة
+    public function subcategory()
+    {
+        return $this->standardPart ? $this->standardPart->subcategory() : null;
+    }
+
+    public function category()
+    {
+        return $this->subcategory() ? $this->subcategory()->category() : null;
+    }
+
     // القطعة لها صور متعددة
     public function images()
     {

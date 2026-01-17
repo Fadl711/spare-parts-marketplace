@@ -51,8 +51,12 @@ return [
             'driver' => 'sanctum',
             'provider' => 'customers',
         ],
-        'seller' => [ // حارس خاص بالبائعين
+        'seller' => [ // حارس خاص بالبائعين (API)
             'driver' => 'sanctum',
+            'provider' => 'sellers',
+        ],
+        'seller_web' => [ // حارس خاص بالبائعين (Web Dashboard)
+            'driver' => 'session',
             'provider' => 'sellers',
         ],
     ],
@@ -95,10 +99,10 @@ return [
         ],
     ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+    // 'users' => [
+    //     'driver' => 'database',
+    //     'table' => 'users',
+    // ],
 
     /*
     |--------------------------------------------------------------------------
@@ -122,6 +126,12 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'sellers' => [
+            'provider' => 'sellers',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
